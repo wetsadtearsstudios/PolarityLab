@@ -1,0 +1,435 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		69BE493F2E43439C000692EA /* PythonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 69BE493E2E43439C000692EA /* PythonKit */; };
+		69BE49632E434AB7000692EA /* python310_embed in Embed Python */ = {isa = PBXBuildFile; fileRef = 69BE49622E434AB7000692EA /* python310_embed */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		69BE49672E434BF1000692EA /* en_core_web_sm in Resources */ = {isa = PBXBuildFile; fileRef = 69BE49662E434BF1000692EA /* en_core_web_sm */; };
+		69BE496B2E434C1F000692EA /* spacy in Resources */ = {isa = PBXBuildFile; fileRef = 69BE496A2E434C1F000692EA /* spacy */; };
+		69BE49732E4363AF000692EA /* bertweet-base-sentiment-analysis in Embed Python */ = {isa = PBXBuildFile; fileRef = 69BE49722E4363AF000692EA /* bertweet-base-sentiment-analysis */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		69BE49752E4363BF000692EA /* twitter-roberta-base-sentiment in Embed Python */ = {isa = PBXBuildFile; fileRef = 69BE49742E4363BF000692EA /* twitter-roberta-base-sentiment */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		69BE49442E4347DD000692EA /* Embed Python */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				69BE49752E4363BF000692EA /* twitter-roberta-base-sentiment in Embed Python */,
+				69BE49732E4363AF000692EA /* bertweet-base-sentiment-analysis in Embed Python */,
+				69BE49632E434AB7000692EA /* python310_embed in Embed Python */,
+			);
+			name = "Embed Python";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		69B0B5422E40800A00B2DCB9 /* python310_embed */ = {isa = PBXFileReference; lastKnownFileType = folder; path = python310_embed; sourceTree = "<group>"; };
+		69B0B5552E41119D00B2DCB9 /* sentiment */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sentiment; path = PolarityLab/Resources/nltk_data/sentiment; sourceTree = "<group>"; };
+		69BE38822E4342A5000692EA /* PolarityLab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PolarityLab.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		69BE49622E434AB7000692EA /* python310_embed */ = {isa = PBXFileReference; lastKnownFileType = folder; path = python310_embed; sourceTree = "<group>"; };
+		69BE49642E434B87000692EA /* twitter-roberta-base-sentiment */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "twitter-roberta-base-sentiment"; path = "PolarityLab/Resources/twitter-roberta-base-sentiment"; sourceTree = "<group>"; };
+		69BE49662E434BF1000692EA /* en_core_web_sm */ = {isa = PBXFileReference; lastKnownFileType = folder; name = en_core_web_sm; path = PolarityLab/Resources/en_core_web_sm; sourceTree = "<group>"; };
+		69BE496A2E434C1F000692EA /* spacy */ = {isa = PBXFileReference; lastKnownFileType = folder; name = spacy; path = PolarityLab/Resources/spacy; sourceTree = "<group>"; };
+		69BE496E2E434CB5000692EA /* bertweet-base-sentiment-analysis */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "bertweet-base-sentiment-analysis"; path = "PolarityLab/Resources/bertweet-base-sentiment-analysis"; sourceTree = "<group>"; };
+		69BE49722E4363AF000692EA /* bertweet-base-sentiment-analysis */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "bertweet-base-sentiment-analysis"; path = "PolarityLab/Resources/bertweet-base-sentiment-analysis"; sourceTree = "<group>"; };
+		69BE49742E4363BF000692EA /* twitter-roberta-base-sentiment */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "twitter-roberta-base-sentiment"; path = "PolarityLab/Resources/twitter-roberta-base-sentiment"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		69BE495B2E434A6D000692EA /* Exceptions for "PolarityLab" folder in "PolarityLab" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AnalysisResultsView.swift,
+				AnalyzingView.swift,
+				Assets.xcassets,
+				CSVDocument.swift,
+				CSVPreviewView.swift,
+				CustomTemplatesView.swift,
+				EmptyStateView.swift,
+				LexiconView.swift,
+				MainView.swift,
+				PolarityLabApp.swift,
+				PythonBridge.swift,
+				Resources/nltk_data/sentiment/emoji_utf8_lexicon.txt,
+				Resources/nltk_data/sentiment/vader_lexicon.csv,
+				Resources/nltk_data/sentiment/vader_lexicon.txt,
+				Resources/polarity_sentiment.py,
+				SentimentAnalysisView.swift,
+				SentimentModel.swift,
+				SettingsView.swift,
+				SimpleCSV.swift,
+				SimpleGrid.swift,
+			);
+			target = 69BE38812E4342A4000692EA /* PolarityLab */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		69B026B12E406D2800B2DCB9 /* PolarityLab */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				69BE495B2E434A6D000692EA /* Exceptions for "PolarityLab" folder in "PolarityLab" target */,
+			);
+			path = PolarityLab;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		69BE387F2E4342A4000692EA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				69BE493F2E43439C000692EA /* PythonKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		69B026A62E406D2800B2DCB9 = {
+			isa = PBXGroup;
+			children = (
+				69BE49742E4363BF000692EA /* twitter-roberta-base-sentiment */,
+				69BE496E2E434CB5000692EA /* bertweet-base-sentiment-analysis */,
+				69BE49722E4363AF000692EA /* bertweet-base-sentiment-analysis */,
+				69BE496A2E434C1F000692EA /* spacy */,
+				69BE49662E434BF1000692EA /* en_core_web_sm */,
+				69BE49642E434B87000692EA /* twitter-roberta-base-sentiment */,
+				69BE49622E434AB7000692EA /* python310_embed */,
+				69B0B5552E41119D00B2DCB9 /* sentiment */,
+				69B0B5422E40800A00B2DCB9 /* python310_embed */,
+				69B026B12E406D2800B2DCB9 /* PolarityLab */,
+				69B026E52E40743800B2DCB9 /* Frameworks */,
+				69B026B02E406D2800B2DCB9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		69B026B02E406D2800B2DCB9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				69BE38822E4342A5000692EA /* PolarityLab.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		69B026E52E40743800B2DCB9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		69BE38812E4342A4000692EA /* PolarityLab */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 69BE38A12E4342A9000692EA /* Build configuration list for PBXNativeTarget "PolarityLab" */;
+			buildPhases = (
+				69BE387E2E4342A4000692EA /* Sources */,
+				69BE387F2E4342A4000692EA /* Frameworks */,
+				69BE38802E4342A4000692EA /* Resources */,
+				69BE49442E4347DD000692EA /* Embed Python */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PolarityLab;
+			packageProductDependencies = (
+				69BE493E2E43439C000692EA /* PythonKit */,
+			);
+			productName = PolarityLab;
+			productReference = 69BE38822E4342A5000692EA /* PolarityLab.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		69B026A72E406D2800B2DCB9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					69BE38812E4342A4000692EA = {
+						CreatedOnToolsVersion = 16.4;
+					};
+				};
+			};
+			buildConfigurationList = 69B026AA2E406D2800B2DCB9 /* Build configuration list for PBXProject "PolarityLab" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 69B026A62E406D2800B2DCB9;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				693B71B52E432C3800AEC674 /* XCRemoteSwiftPackageReference "PythonKit" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 69B026B02E406D2800B2DCB9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				69BE38812E4342A4000692EA /* PolarityLab */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		69BE38802E4342A4000692EA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				69BE496B2E434C1F000692EA /* spacy in Resources */,
+				69BE49672E434BF1000692EA /* en_core_web_sm in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		69BE387E2E4342A4000692EA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		69B026CF2E406D3700B2DCB9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 9U57776ZH3;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		69B026D02E406D3700B2DCB9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 9U57776ZH3;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		69BE38A22E4342A9000692EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = PolarityLab/PolarityLabDebug.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9U57776ZH3;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = wetsadtearstudios.PolarityLab;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		69BE38A32E4342A9000692EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = PolarityLab/PolarityLab.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9U57776ZH3;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = wetsadtearstudios.PolarityLab;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		69B026AA2E406D2800B2DCB9 /* Build configuration list for PBXProject "PolarityLab" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				69B026CF2E406D3700B2DCB9 /* Debug */,
+				69B026D02E406D3700B2DCB9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		69BE38A12E4342A9000692EA /* Build configuration list for PBXNativeTarget "PolarityLab" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				69BE38A22E4342A9000692EA /* Debug */,
+				69BE38A32E4342A9000692EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		693B71B52E432C3800AEC674 /* XCRemoteSwiftPackageReference "PythonKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pvieito/PythonKit.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		69BE493E2E43439C000692EA /* PythonKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 693B71B52E432C3800AEC674 /* XCRemoteSwiftPackageReference "PythonKit" */;
+			productName = PythonKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 69B026A72E406D2800B2DCB9 /* Project object */;
+}

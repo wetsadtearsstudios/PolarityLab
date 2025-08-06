@@ -1,0 +1,11 @@
+# Xcode
+build/
+DerivedData/
+*.xcworkspace
+*.xcuserdatad
+*.lock
+
+# Bundled Python embed / data
+python310_embed/
+PolarityLab/Resources/bertweet-base-sentiment-analysis/
+PolarityLab/Resources/twitter-roberta-base-sentiment/
