@@ -8,23 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		69BE493F2E43439C000692EA /* PythonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 69BE493E2E43439C000692EA /* PythonKit */; };
-		69BE49632E434AB7000692EA /* python310_embed in Embed Python */ = {isa = PBXBuildFile; fileRef = 69BE49622E434AB7000692EA /* python310_embed */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		69BE49672E434BF1000692EA /* en_core_web_sm in Resources */ = {isa = PBXBuildFile; fileRef = 69BE49662E434BF1000692EA /* en_core_web_sm */; };
 		69BE496B2E434C1F000692EA /* spacy in Resources */ = {isa = PBXBuildFile; fileRef = 69BE496A2E434C1F000692EA /* spacy */; };
 		69BE49732E4363AF000692EA /* bertweet-base-sentiment-analysis in Embed Python */ = {isa = PBXBuildFile; fileRef = 69BE49722E4363AF000692EA /* bertweet-base-sentiment-analysis */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		69BE49752E4363BF000692EA /* twitter-roberta-base-sentiment in Embed Python */ = {isa = PBXBuildFile; fileRef = 69BE49742E4363BF000692EA /* twitter-roberta-base-sentiment */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		69BE497A2E43B263000692EA /* python310_embed in Embed Python */ = {isa = PBXBuildFile; fileRef = 69BE49792E43B263000692EA /* python310_embed */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		69BE497C2E43B8EF000692EA /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 69BE497B2E43B8EE000692EA /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		69BE49442E4347DD000692EA /* Embed Python */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				69BE497A2E43B263000692EA /* python310_embed in Embed Python */,
 				69BE49752E4363BF000692EA /* twitter-roberta-base-sentiment in Embed Python */,
 				69BE49732E4363AF000692EA /* bertweet-base-sentiment-analysis in Embed Python */,
-				69BE49632E434AB7000692EA /* python310_embed in Embed Python */,
 			);
 			name = "Embed Python";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -42,6 +43,9 @@
 		69BE496E2E434CB5000692EA /* bertweet-base-sentiment-analysis */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "bertweet-base-sentiment-analysis"; path = "PolarityLab/Resources/bertweet-base-sentiment-analysis"; sourceTree = "<group>"; };
 		69BE49722E4363AF000692EA /* bertweet-base-sentiment-analysis */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "bertweet-base-sentiment-analysis"; path = "PolarityLab/Resources/bertweet-base-sentiment-analysis"; sourceTree = "<group>"; };
 		69BE49742E4363BF000692EA /* twitter-roberta-base-sentiment */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "twitter-roberta-base-sentiment"; path = "PolarityLab/Resources/twitter-roberta-base-sentiment"; sourceTree = "<group>"; };
+		69BE49762E438582000692EA /* libpython3.10.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpython3.10.dylib; path = "python310_embed/python-install/lib/libpython3.10.dylib"; sourceTree = "<group>"; };
+		69BE49792E43B263000692EA /* python310_embed */ = {isa = PBXFileReference; lastKnownFileType = folder; path = python310_embed; sourceTree = "<group>"; };
+		69BE497B2E43B8EE000692EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -99,6 +103,8 @@
 		69B026A62E406D2800B2DCB9 = {
 			isa = PBXGroup;
 			children = (
+				69BE49792E43B263000692EA /* python310_embed */,
+				69BE49762E438582000692EA /* libpython3.10.dylib */,
 				69BE49742E4363BF000692EA /* twitter-roberta-base-sentiment */,
 				69BE496E2E434CB5000692EA /* bertweet-base-sentiment-analysis */,
 				69BE49722E4363AF000692EA /* bertweet-base-sentiment-analysis */,
@@ -111,6 +117,7 @@
 				69B026B12E406D2800B2DCB9 /* PolarityLab */,
 				69B026E52E40743800B2DCB9 /* Frameworks */,
 				69B026B02E406D2800B2DCB9 /* Products */,
+				69BE497B2E43B8EE000692EA /* Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -137,9 +144,10 @@
 			buildConfigurationList = 69BE38A12E4342A9000692EA /* Build configuration list for PBXNativeTarget "PolarityLab" */;
 			buildPhases = (
 				69BE387E2E4342A4000692EA /* Sources */,
-				69BE387F2E4342A4000692EA /* Frameworks */,
 				69BE38802E4342A4000692EA /* Resources */,
 				69BE49442E4347DD000692EA /* Embed Python */,
+				694696BC2E4456A800AE9884 /* Resign Script */,
+				69BE387F2E4342A4000692EA /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -195,12 +203,37 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69BE497C2E43B8EF000692EA /* Info.plist in Resources */,
 				69BE496B2E434C1F000692EA /* spacy in Resources */,
 				69BE49672E434BF1000692EA /* en_core_web_sm in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		694696BC2E4456A800AE9884 /* Resign Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/python310_embed\n",
+			);
+			name = "Resign Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/python310_embed/.re-signed",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\nset -euo pipefail\n# ---------------------------------------------\n# 0. Paths from Xcode\nEMBED_DIR=\"${SCRIPT_INPUT_FILE_0}\"        # python310_embed dir\nSTAMP=\"${SCRIPT_OUTPUT_FILE_0}\"           # …/.re-signed\n[[ -d \"$EMBED_DIR\" ]] || exit 0           # phase ran too early → just skip\n\n# 1. Prune junk Apple won’t sign\nfind \"$EMBED_DIR\" -type f \\( -name '*.o' -o -name '*.a' -o -name '*.la' \\) -delete\nfind \"$EMBED_DIR\" -type d -name '*.dSYM' -prune -exec rm -rf {} +\n\n# 2. Tiny App-Sandbox entitlements for helpers\nENT=\"${TEMP_DIR}/python_helper.entitlements\"\n/bin/cat >\"$ENT\" <<'PLIST'\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\"\n  \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\"><dict>\n  <key>com.apple.security.app-sandbox</key><true/>\n</dict></plist>\nPLIST\n\n# 3. Re-sign every Mach-O helper inside the embed\necho \"🔏  Re-signing Python helpers...\"\nfind \"$EMBED_DIR\" -type f \\( -perm -u=x -o -name '*.dylib' -o -name '*.so' \\) |\nwhile read -r file ; do\n  /usr/bin/codesign --force --options runtime --timestamp \\\n    --entitlements \"$ENT\" --sign \"$EXPANDED_CODE_SIGN_IDENTITY\" \"$file\"\ndone\n\n# 4. Stamp so Xcode knows the phase finished OK\ntouch \"$STAMP\"\necho \"✅  Embedded Python re-signed\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		69BE387E2E4342A4000692EA /* Sources */ = {
@@ -347,7 +380,9 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_CFBundleDisplayName = PolarityLab;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = WetSadTearStudios;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -375,7 +410,9 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_CFBundleDisplayName = PolarityLab;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = WetSadTearStudios;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

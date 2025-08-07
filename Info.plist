@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" 
+   "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+   Info.plist
+   PolarityLab
+
+   Created by Trevor on 2025-08-06.
+-->
+<plist version="1.0">
+<dict>
+    <!-- your app’s App Store category -->
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.utilities</string>
+    
+    <!-- your other Info.plist keys would go here… -->
+    <key>CFBundleIdentifier</key>
+    <string>wetsadtearstudios.PolarityLab</string>
+    <key>CFBundleName</key>
+    <string>PolarityLab</string>
+    <key>CFBundleVersion</key>
+    <string>1.0</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+</dict>
+</plist>
