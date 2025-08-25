@@ -1,109 +1,119 @@
+// SimpleCSV.swift
 import Foundation
 
-/// Loads a CSV without full quoted-comma support, but robustly handles Excel exports.
-/// Prints detailed debug info on failures, and supports sandbox security-scoped URLs.
+/// Lightweight CSV loader optimized for *preview*.
+/// - Detects delimiter (comma / semicolon / tab)
+/// - Handles RFC-4180 quotes (embedded commas / CRLFs)
+/// - UTF-8±BOM / UTF-16 LE/BE / CP1252 / ISO-8859-1
+/// - Strips basic HTML tags in cells
 struct SimpleCSV {
-    let url: URL
-    let headers: [String]
-    let previewRows: [[String:String]]
-    let allRows: [[String:String]]
 
-    /// - Parameters:
-    ///   - url: file URL to the CSV (security-scoped if sandboxed)
-    ///   - maxPreview: how many data rows to grab for preview
+    // Public API
+    let url: URL
+    let headers: [String]                 // never empty
+    let previewRows: [[String: String]]   // first N rows only
+    let totalRows: Int                    // total non-empty data rows
+
+    // Back-compat alias (older code referenced `allRows`)
+    var allRows: [[String: String]] { previewRows }
+
+    /// Returns nil if header row can’t be parsed.
     init?(url: URL, maxPreview: Int = 5) {
         self.url = url
-        print("🔍 SimpleCSV: Attempting to load \(url.path)")
 
-        // 0️⃣ Start security scope if needed
-        let didStart = url.startAccessingSecurityScopedResource()
-        if !didStart {
-            print("❌ SimpleCSV: couldn’t start security scope for \(url.path)")
-            return nil
+        // Security scope
+        let unlocked = url.startAccessingSecurityScopedResource()
+        defer { if unlocked { url.stopAccessingSecurityScopedResource() } }
+
+        guard let rawData = try? Data(contentsOf: url) else { return nil }
+        guard var text = SimpleCSV.decode(data: rawData) else { return nil }
+        if text.hasPrefix("\u{FEFF}") { text.removeFirst() } // strip UTF-8 BOM
+
+        // Physical lines (keep empties)
+        let lines = text.split(omittingEmptySubsequences: false, whereSeparator: \.isNewline).map(String.init)
+        guard let first = lines.first else { return nil }
+
+        // Delimiter from first line
+        let delimiter: Character = [",", ";", "\t"].max { a, b in
+            first.filter { $0 == a }.count < first.filter { $0 == b }.count
+        } ?? ","
+
+        // Streaming parse (don’t materialize full table)
+        var _headers: [String]? = nil
+        var _preview: [[String:String]] = []
+        var _total = 0
+
+        var inQuotes = false
+        var currentRow = [String]()
+        var currentField = ""
+
+        func sanitize(_ s: String) -> String {
+            s.trimmingCharacters(in: .whitespacesAndNewlines)
+             .replacingOccurrences(of: #"<[^>]+>"#,
+                                   with: "",
+                                   options: [.regularExpression, .caseInsensitive])
         }
-        defer {
-            url.stopAccessingSecurityScopedResource()
+        func endField() {
+            currentRow.append(sanitize(currentField))
+            currentField.removeAll(keepingCapacity: true)
         }
+        func endRecord() {
+            // ignore pure-empty
+            if currentRow.count == 1, currentRow[0].isEmpty { currentRow.removeAll(); return }
 
-        // 1️⃣ Read raw data
-        let rawData: Data
-        do {
-            rawData = try Data(contentsOf: url)
-            print("✅ SimpleCSV: Read \(rawData.count) bytes")
-        } catch {
-            print("❌ SimpleCSV: could not read data at \(url): \(error)")
-            return nil
-        }
-
-        // 2️⃣ Try UTF-8, then UTF-16
-        let text: String
-        if let s = String(data: rawData, encoding: .utf8) {
-            text = s
-            print("✅ SimpleCSV: decoded as UTF-8")
-        } else if let s = String(data: rawData, encoding: .utf16) {
-            text = s
-            print("✅ SimpleCSV: decoded as UTF-16")
-        } else {
-            print("❌ SimpleCSV: unsupported text encoding for \(url).")
-            return nil
-        }
-
-        // 3️⃣ Strip BOM if present
-        let bom = "\u{FEFF}"
-        let stripped = text.hasPrefix(bom)
-            ? String(text.dropFirst())
-            : text
-        if text.hasPrefix(bom) {
-            print("ℹ️ SimpleCSV: dropped UTF-8 BOM")
-        }
-
-        // 4️⃣ Split into non-empty lines
-        let rawLines = stripped
-            .components(separatedBy: .newlines)
-            .filter { !$0.isEmpty }
-        print("ℹ️ SimpleCSV: found \(rawLines.count) non-empty lines")
-
-        guard rawLines.count > 1 else {
-            print("❌ SimpleCSV: not enough lines (\(rawLines.count)) in \(url).")
-            return nil
-        }
-
-        // 5️⃣ Detect delimiter
-        let headerLine = rawLines[0]
-        let delimiter: String
-        if headerLine.contains(",") {
-            delimiter = ","
-        } else if headerLine.contains(";") {
-            delimiter = ";"
-        } else {
-            print("❌ SimpleCSV: could not detect delimiter in header: “\(headerLine)”")
-            return nil
-        }
-        print("✅ SimpleCSV: using delimiter “\(delimiter)”")
-
-        // 6️⃣ Parse headers
-        let cols = headerLine.components(separatedBy: delimiter)
-        guard !cols.isEmpty else {
-            print("❌ SimpleCSV: parsed zero columns from header.")
-            return nil
-        }
-        headers = cols
-        print("✅ SimpleCSV: headers = \(headers)")
-
-        // 7️⃣ Helper to map a line into [header:value]
-        func parseLine(_ line: String) -> [String:String] {
-            let values = line.components(separatedBy: delimiter)
-            var dict = [String:String]()
-            for (i, header) in cols.enumerated() {
-                dict[header] = i < values.count ? values[i] : ""
+            if _headers == nil {
+                _headers = currentRow.map { $0.isEmpty ? "<empty>" : $0 }
+            } else if let hdrs = _headers {
+                var dict: [String:String] = [:]
+                for (i, h) in hdrs.enumerated() { dict[h] = i < currentRow.count ? currentRow[i] : "" }
+                if dict.values.contains(where: { !$0.isEmpty }) {
+                    _total &+= 1
+                    if _preview.count < maxPreview { _preview.append(dict) }
+                }
             }
-            return dict
+            currentRow.removeAll(keepingCapacity: true)
         }
 
-        // 8️⃣ Build rows
-        let dataLines = rawLines.dropFirst()
-        allRows     = dataLines.map(parseLine)
-        previewRows = Array(allRows.prefix(maxPreview))
-        print("✅ SimpleCSV: parsed \(allRows.count) rows, previewing \(previewRows.count)")
+        var it = lines.makeIterator()
+        while let line = it.next() {
+            var li = line.makeIterator()
+            while let ch = li.next() {
+                switch ch {
+                case "\"":
+                    if inQuotes, let n = li.next(), n == "\"" {
+                        currentField.append("\"")
+                    } else {
+                        inQuotes.toggle()
+                    }
+                case delimiter where !inQuotes:
+                    endField()
+                default:
+                    currentField.append(ch)
+                }
+            }
+            if inQuotes {
+                currentField.append("\n")
+            } else {
+                endField(); endRecord()
+            }
+        }
+
+        guard let hdrs = _headers, !hdrs.isEmpty else { return nil }
+        self.headers = hdrs
+        self.previewRows = _preview
+        self.totalRows = _total
+
+        // Silent by default. Use dlog to avoid dumping rows.
+        dlog("CSV preview headers=\(headers.count) rows=\(previewRows.count)")
+    }
+
+    private static func decode(data: Data) -> String? {
+        if data.starts(with: [0xEF,0xBB,0xBF]) { return String(data: data.dropFirst(3), encoding: .utf8) }
+        if data.starts(with: [0xFF,0xFE])     { return String(data: data, encoding: .utf16LittleEndian) }
+        if data.starts(with: [0xFE,0xFF])     { return String(data: data, encoding: .utf16BigEndian) }
+        for enc in [.utf8, .utf16LittleEndian, .utf16BigEndian, .windowsCP1252, .isoLatin1] as [String.Encoding] {
+            if let s = String(data: data, encoding: enc) { return s }
+        }
+        return nil
     }
 }

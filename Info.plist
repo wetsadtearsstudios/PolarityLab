@@ -4,14 +4,17 @@
 <!--
    Info.plist
    PolarityLab
-
    Created by Trevor on 2025-08-06.
 -->
 <plist version="1.0">
 <dict>
-    <!-- your app’s App Store category -->
+    <!-- your app's App Store category -->
     <key>LSApplicationCategoryType</key>
     <string>public.app-category.utilities</string>
+    
+    <!-- Add this missing key -->
+    <key>CFBundleExecutable</key>
+    <string>PolarityLab</string>
     
     <!-- your other Info.plist keys would go here… -->
     <key>CFBundleIdentifier</key>

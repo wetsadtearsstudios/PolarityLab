@@ -1,201 +1,187 @@
 import SwiftUI
+import Charts
 import UniformTypeIdentifiers
+import Foundation
+#if canImport(AppKit)
+import AppKit
+import CoreText
+import CoreGraphics
+#endif
 
-/// Shows your final sentiment results and keyword compound scores.
+@MainActor
 struct AnalysisResultsView: View {
-    // MARK: – Inputs
-    let selectedColumns: [String]
-    let allRows: [[String: Any]]        // full rows, with appended pos/neu/neg/compound
-    let keywords: [(String, Double)]    // [(word, compoundScore)]
-    let exportData: Data?
-    let keywordExportData: Data?
-    @Binding var showingExporter: Bool
-    @Binding var showingKeywordExporter: Bool
-    let onReset: () -> Void
-
-    // MARK: – Layout constants
-    private let cellWidth: CGFloat       = 100
-    private let cellPadding: CGFloat     = 8
-    private let maxPreviewRows           = 100
-
-    // build the final column order: text cols first, then pos/neut/neg/compound
-    private var displayColumns: [String] {
-        let sentimentCols = ["pos","neu","neg","compound"]
-        let extras = sentimentCols.filter { !selectedColumns.contains($0) }
-        return selectedColumns + extras
+ // Inputs
+ let keywords: [(String, Double)]
+ let exportSourcePath: String
+ let headers: [String]
+ let meta: [String: Any]
+ let hasNeutral: Bool
+ @Binding var showingExporter: Bool
+ let onReset: () -> Void
+ let synopsis: String?
+ let appliedFilterSummary: String?
+ let appliedDateSummary: String?
+ let keywordOverrides: [String: Double]?
+ 
+ // State
+ @State var xDomain: ClosedRange<Date>? = nil
+ @State var yDomain: ClosedRange<Double>? = nil
+ @State var timeline: [TLPoint] = []
+ @State var visibleSeries: [TLPoint] = []
+ @State var allDates: [Date] = []
+ @State var pieCounts: [PieSlice] = []
+ @State var yearCompareSeries: [YearLinePoint] = []
+ @State var events: [EventMarker] = []
+ @State var yoyAvailable: Bool = false
+ @State var keywordCounts: [String: Int] = [:]
+ @State var scrollX: Date = Date()
+ @State var visibleSpan: TimeInterval = 86_400
+ @State var hoverPoint: TLPoint? = nil
+ 
+ // Toggles
+ @AppStorage("showVolumeBand")  var showVolumeBand: Bool  = true
+ @AppStorage("showYearCompare") var showYearCompare: Bool = false
+ @AppStorage("showEventMarkers") var showEventMarkers: Bool = false
+ @AppStorage("neutralBandWidth") var neutralBandWidth: Double = 0.05
+ 
+ // Layout constants (instance-level so extensions can access)
+ var tableSpacing: CGFloat { 16 }
+ var pieWidth: CGFloat { 320 }
+ var sectionSpacing: CGFloat { 16 }
+ 
+ // Calendar (internal so extensions in other files can access it)
+ var calUTC: Calendar {
+  var c = Calendar(identifier: .gregorian)
+  c.timeZone = TimeZone(secondsFromGMT: 0)!
+  return c
+ }
+ 
+ var body: some View {
+  GeometryReader { geo in
+   let inset: CGFloat = 16
+   let minContentWidth: CGFloat = 980
+   let available = geo.size.width - inset * 2
+   let contentWidth = max(minContentWidth, available)
+   
+   ScrollView([.vertical, .horizontal]) {
+    VStack(spacing: sectionSpacing) {
+     header(contentWidth: contentWidth)
+     chartCard().frame(width: contentWidth)
+     overlayToggleBar.frame(width: contentWidth).padding(.top, 2)
+     kpAndPieRow(contentWidth: contentWidth)
+     statsSection(contentWidth: contentWidth)
+     exportBar(contentWidth: contentWidth)
     }
+    .frame(minWidth: contentWidth, maxWidth: .infinity)
+    .padding(.vertical, 8)
+    .padding(.horizontal, inset)
+   }
+   .frame(width: geo.size.width, height: geo.size.height)
+   .onAppear {
+    // Order ensures derived values (visibleRange/xDomain) are valid before overlays & counts.
+    buildTimeline()
+    setVisibleToFullRange()
+    xDomain = visibleRange
+    buildOverlays()
+    rebuildKeywordsFromMeta()   // provided by +Scanning.swift
+    parseEvents()
+    buildPieCounts()
+   }
+  }
+  .onChange(of: scrollX) { _ in
+   xDomain = visibleRange
+   buildOverlays()
+   rebuildKeywordsFromMeta()
+  }
+  .onChange(of: visibleSpan) { _ in
+   xDomain = visibleRange
+   buildOverlays()
+   rebuildKeywordsFromMeta()
+  }
+ }
 
-    var body: some View {
-        VStack(spacing: 0) {
-            // ─── Title & Reset ───────────────────────────
-            HStack {
-                Text("Results")
-                    .font(.largeTitle).bold()
-                Spacer()
-                Button(action: onReset) {
-                    Label("Reset", systemImage: "arrow.counterclockwise")
-                        .font(.title3).bold()
-                        .padding(.vertical, 10)
-                        .padding(.horizontal, 16)
-                        .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(Color.gray.opacity(0.2))
-                        )
-                        .foregroundColor(.primary)
+    // Lightweight, zero-rescan keyword counts built from export meta only.
+    // This keeps the UI fully responsive: no dataset reloads on scroll/zoom.
+    func rebuildKeywordsFromMeta() {
+        func extractPairs() -> [(String, Double)] {
+            if let kt = meta["keywords_table"] as? [[String: Any]] {
+                var acc: [(String, Double)] = []
+                for row in kt {
+                    if let w = row["keyword"] as? String {
+                        if let d = row["score"] as? Double { acc.append((w, d)) }
+                        else if let n = row["score"] as? NSNumber { acc.append((w, n.doubleValue)) }
+                        else if let s = row["score"] as? String, let d = Double(s) { acc.append((w, d)) }
+                    }
                 }
-                .buttonStyle(.plain)
+                if !acc.isEmpty { return acc }
             }
-            .padding(.horizontal)
-            .padding(.top, 16)
-
-            Divider()
-
-            // ─── Main Results Table ──────────────────────
-            ScrollView([.horizontal, .vertical], showsIndicators: true) {
-                VStack(spacing: 0) {
-                    // Header row
-                    HStack(spacing: 0) {
-                        ForEach(displayColumns, id: \.self) { col in
-                            Text(col.capitalized)
-                                .font(.headline).bold()
-                                .frame(width: cellWidth)
-                                .padding(.vertical, cellPadding)
-                        }
-                    }
-                    .background(Color.secondary.opacity(0.1))
-                    Divider()
-
-                    // Data rows (limit to 100)
-                    ForEach(Array(allRows.prefix(maxPreviewRows).enumerated()), id: \.offset) { idx, row in
-                        HStack(spacing: 0) {
-                            ForEach(displayColumns, id: \.self) { col in
-                                cellText(for: row[col])
-                                    .frame(width: cellWidth)
-                                    .padding(.vertical, cellPadding)
-                            }
-                        }
-                        if idx < min(allRows.count, maxPreviewRows) - 1 {
-                            Divider()
-                        }
-                    }
+            if let kc = meta["keywords_comp"] as? [[String: Any]] {
+                var acc: [(String, Double)] = []
+                for row in kc {
+                    var name: String?
+                    if let w = row["word"] as? String { name = w }
+                    if name == nil, let t = row["token"] as? String { name = t }
+                    if name == nil, let t = row["term"]  as? String { name = t }
+                    var sc: Double?
+                    if let d = row["compound"] as? Double { sc = d }
+                    else if let n = row["compound"] as? NSNumber { sc = n.doubleValue }
+                    else if let s = row["compound"] as? String, let d = Double(s) { sc = d }
+                    if let n = name, let s = sc { acc.append((n, s)) }
                 }
-                .padding(.horizontal, cellPadding)
+                if !acc.isEmpty { return acc }
             }
-            .frame(maxHeight: 300)
-
-            Divider()
-                .padding(.vertical, 16)
-
-            // ─── Keyword Compound Table ─────────────────
-            if !keywords.isEmpty {
-                Text("Keyword Compound Scores")
-                    .font(.title2).bold()
-                    .padding(.bottom, 8)
-
-                ScrollView(.vertical, showsIndicators: true) {
-                    VStack(spacing: 0) {
-                        // header
-                        HStack {
-                            Text("Word")
-                                .font(.headline)
-                                .frame(width: 150, alignment: .leading)
-                            Spacer()
-                            Text("Compound")
-                                .font(.headline)
-                                .frame(width: 80, alignment: .trailing)
-                        }
-                        .padding(.vertical, 4)
-                        Divider()
-
-                        // rows
-                        ForEach(keywords, id: \.0) { word, comp in
-                            HStack {
-                                Text(word)
-                                    .frame(width: 150, alignment: .leading)
-                                Spacer()
-                                Text(String(format: "%+.2f", comp))
-                                    .foregroundColor(comp > 0
-                                                      ? .green
-                                                      : comp < 0
-                                                        ? .red
-                                                        : .primary)
-                                    .frame(width: 80, alignment: .trailing)
-                            }
-                            .padding(.vertical, 4)
-                            Divider()
-                        }
-                    }
-                    .padding(.horizontal, cellPadding)
-                }
-                .frame(maxHeight: 200)
-            }
-
-            Spacer(minLength: 20)
-
-            // ─── Export Buttons ──────────────────────────
-            HStack(spacing: 16) {
-                // Analysis CSV
-                Button(action: { showingExporter = true }) {
-                    HStack(spacing: 12) {
-                        Image(systemName: "square.and.arrow.up")
-                            .font(.title2)
-                        Text("Export Analysis CSV")
-                            .font(.title3).bold()
-                    }
-                    .padding(.vertical, 14)
-                    .padding(.horizontal, 30)
-                    .background(RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.accentColor))
-                    .foregroundColor(.white)
-                }
-                .buttonStyle(.plain)
-                .fileExporter(
-                    isPresented: $showingExporter,
-                    document: CSVDocument(data: exportData ?? Data()),
-                    contentTypes: [.commaSeparatedText],
-                    defaultFilename: "analysis.csv"
-                ) { _ in }
-
-                // Keywords CSV
-                Button(action: { showingKeywordExporter = true }) {
-                    HStack(spacing: 12) {
-                        Image(systemName: "square.and.arrow.up")
-                            .font(.title2)
-                        Text("Export Keywords CSV")
-                            .font(.title3).bold()
-                    }
-                    .padding(.vertical, 14)
-                    .padding(.horizontal, 30)
-                    .background(RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.accentColor))
-                    .foregroundColor(.white)
-                }
-                .buttonStyle(.plain)
-                .fileExporter(
-                    isPresented: $showingKeywordExporter,
-                    document: CSVDocument(data: keywordExportData ?? Data()),
-                    contentTypes: [.commaSeparatedText],
-                    defaultFilename: "keywords.csv"
-                ) { _ in }
-            }
-            .padding(.bottom, 24)
+            return keywords
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+        let pairs = extractPairs()
+        if pairs.isEmpty {
+            keywordCounts = [:]
+            return
+        }
+
+        func keep(_ w: String) -> Bool {
+            if w.isEmpty { return false }
+            if w.count < 2 || w.count > 24 { return false }
+            if w.contains("_") { return false }
+            if w.rangeOfCharacter(from: CharacterSet.letters) == nil { return false }
+            if w.unicodeScalars.allSatisfy({ CharacterSet.decimalDigits.contains($0) }) { return false }
+            return true
+        }
+
+        var filtered: [(String, Double)] = []
+        var seen = Set<String>()
+        for (w, s) in pairs {
+            let k = w.trimmingCharacters(in: .whitespacesAndNewlines)
+            if k.isEmpty { continue }
+            let lk = k.lowercased()
+            if keep(k), s.isFinite, seen.insert(lk).inserted {
+                filtered.append((k, s))
+            }
+        }
+        if filtered.isEmpty {
+            keywordCounts = [:]
+            return
+        }
+
+        filtered.sort { a, b in
+            let ia = abs(a.1), ib = abs(b.1)
+            if ia == ib { return a.1 == b.1 ? (a.0 < b.0) : (a.1 > b.1) }
+            return ia > ib
+        }
+
+        let maxN = min(filtered.count, 200)
+        let top = Array(filtered.prefix(maxN))
+        let hi = abs(top.first?.1 ?? 1.0)
+        let lo = abs(top.last?.1 ?? 0.0)
+        let denom = max(hi - lo, 0.001)
+
+        var out: [String: Int] = [:]
+        for (w, s) in top {
+            let t = (abs(s) - lo) / denom
+            let count = Int(30 + round(t * 70)) // 30..100
+            out[w] = max(count, 1)
+        }
+        keywordCounts = out
     }
 
-    /// Rounds doubles to two decimals, otherwise shows the string
-    @ViewBuilder
-    private func cellText(for value: Any?) -> some View {
-        if let d = value as? Double {
-            Text(String(format: "%.2f", d))
-                .font(.callout)
-        } else if let s = value as? String, let d = Double(s) {
-            Text(String(format: "%.2f", d))
-                .font(.callout)
-        } else if let s = value as? String {
-            Text(s).font(.callout)
-        } else {
-            Text("").font(.callout)
-        }
-    }
 }

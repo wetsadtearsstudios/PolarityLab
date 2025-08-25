@@ -9,43 +9,22 @@
 /* Begin PBXBuildFile section */
 		69BE493F2E43439C000692EA /* PythonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 69BE493E2E43439C000692EA /* PythonKit */; };
 		69BE49672E434BF1000692EA /* en_core_web_sm in Resources */ = {isa = PBXBuildFile; fileRef = 69BE49662E434BF1000692EA /* en_core_web_sm */; };
-		69BE496B2E434C1F000692EA /* spacy in Resources */ = {isa = PBXBuildFile; fileRef = 69BE496A2E434C1F000692EA /* spacy */; };
-		69BE49732E4363AF000692EA /* bertweet-base-sentiment-analysis in Embed Python */ = {isa = PBXBuildFile; fileRef = 69BE49722E4363AF000692EA /* bertweet-base-sentiment-analysis */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		69BE49752E4363BF000692EA /* twitter-roberta-base-sentiment in Embed Python */ = {isa = PBXBuildFile; fileRef = 69BE49742E4363BF000692EA /* twitter-roberta-base-sentiment */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		69BE497A2E43B263000692EA /* python310_embed in Embed Python */ = {isa = PBXBuildFile; fileRef = 69BE49792E43B263000692EA /* python310_embed */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		69BE497C2E43B8EF000692EA /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 69BE497B2E43B8EE000692EA /* Info.plist */; };
+		69E916DE2E480A0300EC1659 /* distilbert-sst2 in Resources */ = {isa = PBXBuildFile; fileRef = 69E916DD2E480A0200EC1659 /* distilbert-sst2 */; };
+		69E916E02E480A1900EC1659 /* twitter-roberta-base-sentiment in Resources */ = {isa = PBXBuildFile; fileRef = 69E916DF2E480A1900EC1659 /* twitter-roberta-base-sentiment */; };
+		69EC423A2E4CA67B00064702 /* python310_embed in Resources */ = {isa = PBXBuildFile; fileRef = 69EC42392E4CA67300064702 /* python310_embed */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		69BE49442E4347DD000692EA /* Embed Python */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 12;
-			dstPath = "";
-			dstSubfolderSpec = 7;
-			files = (
-				69BE497A2E43B263000692EA /* python310_embed in Embed Python */,
-				69BE49752E4363BF000692EA /* twitter-roberta-base-sentiment in Embed Python */,
-				69BE49732E4363AF000692EA /* bertweet-base-sentiment-analysis in Embed Python */,
-			);
-			name = "Embed Python";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		69B0B5422E40800A00B2DCB9 /* python310_embed */ = {isa = PBXFileReference; lastKnownFileType = folder; path = python310_embed; sourceTree = "<group>"; };
+		698E0E742E500F3300FA073C /* PolarityLab.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = PolarityLab.xcodeproj; sourceTree = "<group>"; };
 		69B0B5552E41119D00B2DCB9 /* sentiment */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sentiment; path = PolarityLab/Resources/nltk_data/sentiment; sourceTree = "<group>"; };
 		69BE38822E4342A5000692EA /* PolarityLab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PolarityLab.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		69BE49622E434AB7000692EA /* python310_embed */ = {isa = PBXFileReference; lastKnownFileType = folder; path = python310_embed; sourceTree = "<group>"; };
-		69BE49642E434B87000692EA /* twitter-roberta-base-sentiment */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "twitter-roberta-base-sentiment"; path = "PolarityLab/Resources/twitter-roberta-base-sentiment"; sourceTree = "<group>"; };
 		69BE49662E434BF1000692EA /* en_core_web_sm */ = {isa = PBXFileReference; lastKnownFileType = folder; name = en_core_web_sm; path = PolarityLab/Resources/en_core_web_sm; sourceTree = "<group>"; };
-		69BE496A2E434C1F000692EA /* spacy */ = {isa = PBXFileReference; lastKnownFileType = folder; name = spacy; path = PolarityLab/Resources/spacy; sourceTree = "<group>"; };
-		69BE496E2E434CB5000692EA /* bertweet-base-sentiment-analysis */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "bertweet-base-sentiment-analysis"; path = "PolarityLab/Resources/bertweet-base-sentiment-analysis"; sourceTree = "<group>"; };
-		69BE49722E4363AF000692EA /* bertweet-base-sentiment-analysis */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "bertweet-base-sentiment-analysis"; path = "PolarityLab/Resources/bertweet-base-sentiment-analysis"; sourceTree = "<group>"; };
-		69BE49742E4363BF000692EA /* twitter-roberta-base-sentiment */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "twitter-roberta-base-sentiment"; path = "PolarityLab/Resources/twitter-roberta-base-sentiment"; sourceTree = "<group>"; };
-		69BE49762E438582000692EA /* libpython3.10.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpython3.10.dylib; path = "python310_embed/python-install/lib/libpython3.10.dylib"; sourceTree = "<group>"; };
-		69BE49792E43B263000692EA /* python310_embed */ = {isa = PBXFileReference; lastKnownFileType = folder; path = python310_embed; sourceTree = "<group>"; };
 		69BE497B2E43B8EE000692EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		69E916DD2E480A0200EC1659 /* distilbert-sst2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "distilbert-sst2"; path = "PolarityLab/Resources/distilbert-sst2"; sourceTree = "<group>"; };
+		69E916DF2E480A1900EC1659 /* twitter-roberta-base-sentiment */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "twitter-roberta-base-sentiment"; path = "PolarityLab/Resources/twitter-roberta-base-sentiment"; sourceTree = "<group>"; };
+		69EC42392E4CA67300064702 /* python310_embed */ = {isa = PBXFileReference; lastKnownFileType = folder; name = python310_embed; path = PolarityLab/Resources/python310_embed; sourceTree = "<group>"; };
+		69EC423E2E4CE2F600064702 /* inherit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = inherit.entitlements; sourceTree = "<group>"; };
+		69F9238F2E53818F0056235C /* app.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = app.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -53,25 +32,48 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				AnalysisResultsView.swift,
+				"AnalysisResultsView+Chart.swift",
+				"AnalysisResultsView+Derived.swift",
+				"AnalysisResultsView+Exports.swift",
+				"AnalysisResultsView+Layout.swift",
+				"AnalysisResultsView+Scanning.swift",
+				"AnalysisResultsView+Timeline.swift",
+				AnalysisUIConstants.swift,
 				AnalyzingView.swift,
 				Assets.xcassets,
-				CSVDocument.swift,
+				"Components-cards.swift",
+				"Components-chips.swift",
+				"components-controls.swift",
+				"Components-termscorecountable.swift",
+				ConversionPreviewSheet.swift,
+				CSVBookmarkStore.swift,
+				CSVFolderAccess.swift,
 				CSVPreviewView.swift,
+				CSVUtils.swift,
 				CustomTemplatesView.swift,
 				EmptyStateView.swift,
+				FileDocuments.swift,
 				LexiconView.swift,
+				Logging.swift,
 				MainView.swift,
+				Models.swift,
 				PolarityLabApp.swift,
 				PythonBridge.swift,
 				Resources/nltk_data/sentiment/emoji_utf8_lexicon.txt,
-				Resources/nltk_data/sentiment/vader_lexicon.csv,
 				Resources/nltk_data/sentiment/vader_lexicon.txt,
+				Resources/polarity_driver.py,
 				Resources/polarity_sentiment.py,
 				SentimentAnalysisView.swift,
 				SentimentModel.swift,
+				SentimentRuntime.swift,
 				SettingsView.swift,
 				SimpleCSV.swift,
 				SimpleGrid.swift,
+				SynopsisPDFWriter.swift,
+				TableCard.swift,
+				TemplateEditor.swift,
+				TemplateModels.swift,
+				Utils.swift,
 			);
 			target = 69BE38812E4342A4000692EA /* PolarityLab */;
 		};
@@ -100,24 +102,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		698E0E752E500F3300FA073C /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
 		69B026A62E406D2800B2DCB9 = {
 			isa = PBXGroup;
 			children = (
-				69BE49792E43B263000692EA /* python310_embed */,
-				69BE49762E438582000692EA /* libpython3.10.dylib */,
-				69BE49742E4363BF000692EA /* twitter-roberta-base-sentiment */,
-				69BE496E2E434CB5000692EA /* bertweet-base-sentiment-analysis */,
-				69BE49722E4363AF000692EA /* bertweet-base-sentiment-analysis */,
-				69BE496A2E434C1F000692EA /* spacy */,
+				698E0E742E500F3300FA073C /* PolarityLab.xcodeproj */,
+				69EC42392E4CA67300064702 /* python310_embed */,
+				69E916DF2E480A1900EC1659 /* twitter-roberta-base-sentiment */,
+				69E916DD2E480A0200EC1659 /* distilbert-sst2 */,
 				69BE49662E434BF1000692EA /* en_core_web_sm */,
-				69BE49642E434B87000692EA /* twitter-roberta-base-sentiment */,
-				69BE49622E434AB7000692EA /* python310_embed */,
 				69B0B5552E41119D00B2DCB9 /* sentiment */,
-				69B0B5422E40800A00B2DCB9 /* python310_embed */,
 				69B026B12E406D2800B2DCB9 /* PolarityLab */,
 				69B026E52E40743800B2DCB9 /* Frameworks */,
 				69B026B02E406D2800B2DCB9 /* Products */,
 				69BE497B2E43B8EE000692EA /* Info.plist */,
+				69EC423E2E4CE2F600064702 /* inherit.entitlements */,
+				69F9238F2E53818F0056235C /* app.entitlements */,
 			);
 			sourceTree = "<group>";
 		};
@@ -144,10 +148,9 @@
 			buildConfigurationList = 69BE38A12E4342A9000692EA /* Build configuration list for PBXNativeTarget "PolarityLab" */;
 			buildPhases = (
 				69BE387E2E4342A4000692EA /* Sources */,
-				69BE38802E4342A4000692EA /* Resources */,
-				69BE49442E4347DD000692EA /* Embed Python */,
-				694696BC2E4456A800AE9884 /* Resign Script */,
 				69BE387F2E4342A4000692EA /* Frameworks */,
+				69BE38802E4342A4000692EA /* Resources */,
+				69EC423C2E4CDF0200064702 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -191,6 +194,12 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 69B026B02E406D2800B2DCB9 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 698E0E752E500F3300FA073C /* Products */;
+					ProjectRef = 698E0E742E500F3300FA073C /* PolarityLab.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				69BE38812E4342A4000692EA /* PolarityLab */,
@@ -203,8 +212,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				69BE497C2E43B8EF000692EA /* Info.plist in Resources */,
-				69BE496B2E434C1F000692EA /* spacy in Resources */,
+				69EC423A2E4CA67B00064702 /* python310_embed in Resources */,
+				69E916E02E480A1900EC1659 /* twitter-roberta-base-sentiment in Resources */,
+				69E916DE2E480A0300EC1659 /* distilbert-sst2 in Resources */,
 				69BE49672E434BF1000692EA /* en_core_web_sm in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -212,25 +222,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		694696BC2E4456A800AE9884 /* Resign Script */ = {
+		69EC423C2E4CDF0200064702 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/python310_embed\n",
 			);
-			name = "Resign Script";
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/python310_embed/.re-signed",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\nset -euo pipefail\n# ---------------------------------------------\n# 0. Paths from Xcode\nEMBED_DIR=\"${SCRIPT_INPUT_FILE_0}\"        # python310_embed dir\nSTAMP=\"${SCRIPT_OUTPUT_FILE_0}\"           # …/.re-signed\n[[ -d \"$EMBED_DIR\" ]] || exit 0           # phase ran too early → just skip\n\n# 1. Prune junk Apple won’t sign\nfind \"$EMBED_DIR\" -type f \\( -name '*.o' -o -name '*.a' -o -name '*.la' \\) -delete\nfind \"$EMBED_DIR\" -type d -name '*.dSYM' -prune -exec rm -rf {} +\n\n# 2. Tiny App-Sandbox entitlements for helpers\nENT=\"${TEMP_DIR}/python_helper.entitlements\"\n/bin/cat >\"$ENT\" <<'PLIST'\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\"\n  \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\"><dict>\n  <key>com.apple.security.app-sandbox</key><true/>\n</dict></plist>\nPLIST\n\n# 3. Re-sign every Mach-O helper inside the embed\necho \"🔏  Re-signing Python helpers...\"\nfind \"$EMBED_DIR\" -type f \\( -perm -u=x -o -name '*.dylib' -o -name '*.so' \\) |\nwhile read -r file ; do\n  /usr/bin/codesign --force --options runtime --timestamp \\\n    --entitlements \"$ENT\" --sign \"$EXPANDED_CODE_SIGN_IDENTITY\" \"$file\"\ndone\n\n# 4. Stamp so Xcode knows the phase finished OK\ntouch \"$STAMP\"\necho \"✅  Embedded Python re-signed\"\n";
+			shellScript = "#!/bin/bash\n# Skip when signing is disabled\n[ \"${CODE_SIGNING_ALLOWED:-YES}\" = \"NO\" ] && { echo \"[sign] skip: CODE_SIGNING_ALLOWED=NO\"; exit 0; }\n[ \"${RUN_SIGN_SCRIPT:-1}\" = \"0\" ] && { echo \"[sign] skip: RUN_SIGN_SCRIPT=0\"; exit 0; }\n\nset -euxo pipefail\n\nAPP=\"${TARGET_BUILD_DIR}/${WRAPPER_NAME}\"\nRES=\"${APP}/Contents/Resources\"\nEMBED=\"${RES}/python310_embed\"\nSITE=\"${RES}/site-packages\"\nBIN=\"${EMBED}/python-install/bin/python3.10\"\nLIB=\"${EMBED}/python-install/lib/libpython3.10.dylib\"\n\n# App entitlements come from build setting; fallback is optional\nENT_APP=\"${CODE_SIGN_ENTITLEMENTS:-${SRCROOT}/App.entitlements}\"\nENT_INH=\"${SRCROOT}/inherit.entitlements\"\nID=\"${EXPANDED_CODE_SIGN_IDENTITY:-}\"\nCONFIG=\"${CONFIGURATION:-Debug}\"\n\n[[ -d \"$APP\" ]]     || { echo \"[sign] no app bundle; skipping\"; exit 0; }\n[[ -f \"$ENT_APP\" ]] || { echo \"[sign] missing app entitlements: $ENT_APP\"; exit 1; }\n[[ -f \"$ENT_INH\" ]] || { echo \"[sign] missing inherit entitlements: $ENT_INH\"; exit 1; }\n\n# Allow ad-hoc in Debug if no identity; require identity in Release\nif [[ -z \"$ID\" ]]; then\n  if [[ \"$CONFIG\" == \"Release\" ]]; then\n    echo \"[sign] no codesign identity for Release\"; exit 1\n  else\n    ID=\"-\"  # ad-hoc for Debug\n  fi\nfi\necho \"[sign] identity: $ID\"\nTS=\"--timestamp=none\"\n[[ \"$CONFIG\" == \"Release\" ]] && TS=\"\"\n\nsign_raw() { /usr/bin/codesign --force --sign \"$ID\" --options runtime $TS \"$1\"; }\nsign_inh() { /usr/bin/codesign --force --sign \"$ID\" --options runtime --entitlements \"$ENT_INH\" $TS \"$1\"; }\n\necho \"[sign] fix loader paths (embedded Python)\"\nif [[ -x \"$BIN\" ]]; then\n  CUR=\"$(/usr/bin/otool -L \"$BIN\" 2>/dev/null | awk '/libpython3\\.10\\.dylib/ {print $1; exit}')\"\n  if [[ -n \"${CUR:-}\" && \"$CUR\" != \"@loader_path/../lib/libpython3.10.dylib\" ]]; then\n    /usr/bin/install_name_tool -change \"$CUR\" \"@loader_path/../lib/libpython3.10.dylib\" \"$BIN\" || true\n  fi\nfi\n[[ -f \"$LIB\" ]] && /usr/bin/install_name_tool -id \"@loader_path/libpython3.10.dylib\" \"$LIB\" || true\n\necho \"[sign] clear quarantine (embedded Python and site-packages)\"\n/usr/bin/xattr -dr com.apple.quarantine \"$EMBED\" 2>/dev/null || true\n/usr/bin/xattr -dr com.apple.quarantine \"$SITE\"  2>/dev/null || true\n\necho \"[sign] prune stray cp313 wheels (safety)\"\n/usr/bin/find \"$RES\" -type f -name '*cpython-313*.so' -delete || true\n\necho \"[sign] sign .so/.dylib anywhere under Resources (no entitlements)\"\nif [[ -d \"$RES\" ]]; then\n  /usr/bin/find \"$RES\" -type f \\( -name '*.so' -o -name '*.dylib' \\) -print0 | \\\n  while IFS= read -r -d '' f; do\n    # skip symlinks and non-Mach-O files\n    [[ -L \"$f\" ]] && continue\n    if /usr/bin/file \"$f\" | /usr/bin/grep -q \"Mach-O\"; then\n      sign_raw \"$f\" || true\n    fi\n  done\nfi\n\necho \"[sign] sign Mach-O executables under Resources (inherit entitlements)\"\nif [[ -d \"$RES\" ]]; then\n  /usr/bin/find \"$RES\" -type f -perm -111 -print0 | \\\n  while IFS= read -r -d '' f; do\n    [[ -L \"$f\" ]] && continue\n    if /usr/bin/file \"$f\" | /usr/bin/grep -q \"Mach-O .* executable\"; then\n      # Skip interpreter here; handled explicitly below\n      if [[ \"$f\" != \"$BIN\" ]]; then sign_inh \"$f\" || true; fi\n    fi\n  done\nfi\n\necho \"[sign] explicit embedded Python\"\n/usr/bin/true\nif [[ \"$CONFIG\" == \"Debug\" ]]; then\n  [[ -x \"$BIN\" ]] && /usr/bin/codesign --force --sign - --timestamp=none \"$BIN\" || true\nelse\n  [[ -x \"$BIN\" ]] && sign_inh \"$BIN\" || true\nfi\n[[ -f \"$LIB\" ]] && sign_raw \"$LIB\" || true\n\necho \"[sign] sign dylibs under Contents/MacOS (e.g. __preview.dylib)\"\nif [[ -d \"$APP/Contents/MacOS\" ]]; then\n  /usr/bin/find \"$APP/Contents/MacOS\" -type f -name '*.dylib' -print0 | \\\n  while IFS= read -r -d '' f; do\n    [[ -L \"$f\" ]] && continue\n    if /usr/bin/file \"$f\" | /usr/bin/grep -q \"Mach-O\"; then\n      sign_raw \"$f\" || true\n    fi\n  done\nfi\n\necho \"[sign] re-sign app with app entitlements\"\n/usr/bin/codesign --force --sign \"$ID\" --options runtime --entitlements \"$ENT_APP\" $TS \"$APP\"\n\necho \"[sign] verify natives under Resources\"\n/usr/bin/find \"$RES\" -type f \\( -name '*.so' -o -name '*.dylib' \\) -print0 | \\\n/usr/bin/xargs -0 /usr/bin/codesign -vv --strict\n\necho \"[sign] verify deep\"\n/usr/bin/codesign --verify --deep --strict --verbose=4 \"$APP\"\n\necho \"[sign] done\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -372,14 +380,17 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
-				CODE_SIGN_ENTITLEMENTS = PolarityLab/PolarityLabDebug.entitlements;
+				CODE_SIGN_ENTITLEMENTS = app.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9U57776ZH3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_KEY_CFBundleDisplayName = PolarityLab;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = WetSadTearStudios;
@@ -387,6 +398,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)/**";
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = wetsadtearstudios.PolarityLab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -402,14 +414,17 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
-				CODE_SIGN_ENTITLEMENTS = PolarityLab/PolarityLab.entitlements;
+				CODE_SIGN_ENTITLEMENTS = app.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9U57776ZH3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_KEY_CFBundleDisplayName = PolarityLab;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = WetSadTearStudios;
@@ -417,6 +432,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)/**";
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = wetsadtearstudios.PolarityLab;
 				PRODUCT_NAME = "$(TARGET_NAME)";

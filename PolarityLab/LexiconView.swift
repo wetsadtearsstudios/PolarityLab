@@ -1,187 +1,234 @@
 import SwiftUI
+import UniformTypeIdentifiers
+import Combine
 
+// MARK: - Sentiment Playground (uses external SentimentRuntime.swift)
 struct LexiconView: View {
-    struct Entry: Identifiable {
-        let word: String
-        let rawSum: Double
-        var id: String { word }
 
-        private static var _cache: [Entry]?
-        static func loadAll() -> [Entry] {
-            if let c = _cache { return c }
+    // ────────── user-editable state ──────────
+    @State private var selectedModel: SentimentModel = .vader
+    @State private var inputText = ""
+    @ObservedObject private var runtime = SentimentRuntime.shared
 
-            let bundle = Bundle.main
+    // ────────── result / activity state ─────
+    @State private var scores: (pos: Double, neu: Double, neg: Double, compound: Double)?
+    @State private var finalSentiment = ""
+    @State private var isRunning = false
 
-            // 1️⃣ Try CSV at top-level resources
-            if let csvURL = bundle.url(forResource: "vader_lexicon", withExtension: "csv"),
-               let csvText = try? String(contentsOf: csvURL, encoding: .utf8) {
-                let lines = csvText
-                    .split(whereSeparator: \.isNewline)
-                    .map(String.init)
+    // ────────── warm-up overlay timer state ─
+    @State private var elapsed: Double = 0
+    @State private var showSpinner = false
+    private let warmUpTarget: Double = 40     // seconds (progress bar → spinner fallback)
+    private let hardCutoff: Double = 90       // safety: UI won’t get stuck
+    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
-                // If first row is header matching ["word","raw_score"], drop it
-                let dataLines: [String]
-                let headerTokens = lines.first?
-                    .lowercased()
-                    .split(separator: ",")
-                    .map(String.init) ?? []
-                if headerTokens == ["word", "raw_score"] {
-                    dataLines = Array(lines.dropFirst())
-                } else {
-                    dataLines = lines
-                }
-
-                // Parse each data line
-                let parsed = dataLines.compactMap { line -> Entry? in
-                    // split into exactly two parts: word and raw_score
-                    let cols = line
-                        .split(separator: ",", maxSplits: 1, omittingEmptySubsequences: false)
-                        .map(String.init)
-                    guard cols.count == 2,
-                          let raw = Double(cols[1].trimmingCharacters(in: .whitespaces))
-                    else {
-                        return nil
-                    }
-                    return Entry(word: cols[0], rawSum: raw)
-                }
-
-                if !parsed.isEmpty {
-                    _cache = parsed
-                    return parsed
-                }
-            }
-
-            // 2️⃣ Fallback to TXT loader
-            guard let txtURL = bundle.url(forResource: "vader_lexicon", withExtension: "txt"),
-                  let text   = try? String(contentsOf: txtURL, encoding: .utf8)
-            else {
-                _cache = []
-                return []
-            }
-            let lines = text
-                .split(whereSeparator: \.isNewline)
-                .map(String.init)
-            let parsed = lines.compactMap { rawLine -> Entry? in
-                let parts = rawLine
-                    .trimmingCharacters(in: .whitespaces)
-                    .split(separator: " ", maxSplits: 1)
-                guard parts.count == 2,
-                      let raw = Double(parts[1])
-                else {
-                    return nil
-                }
-                return Entry(word: String(parts[0]), rawSum: raw)
-            }
-            _cache = parsed
-            return parsed
-        }
-    }
-
-    @State private var entries: [Entry] = []
-    @State private var isLoading = false
-    @State private var loadFailed = false
-    @State private var searchText = ""
-
-    private var filtered: [Entry] {
-        guard !searchText.isEmpty else { return entries }
-        return entries.filter { $0.word.lowercased().contains(searchText.lowercased()) }
+    // Derived
+    private var isWarming: Bool {
+        if case .warming = runtime.status { return true }
+        return false
     }
 
     var body: some View {
-        VStack(spacing: 12) {
-            Text("VADER Lexicon")
-                .font(.largeTitle)
-                .padding(.top)
+        ZStack {
+            // ────────────────────────────── main UI
+            VStack(spacing: 24) {
 
-            // —— Description + 14 pt links ——
-            VStack(spacing: 4) {
-                Text(
-                    "This is the default sentiment lexicon provided by VADER (Valence Aware Dictionary and sEntiment Reasoner), used by the app to score your data. It captures the sentiment intensity of commonly used words, phrases, and slang—especially in online communication. You can search this page to see how individual words are scored.This “Raw score” is simply the base sentiment value (ranging –4 to +4) assigned to a word or phrase in the default VADER lexicon. However, this isn’t the score used to evaluate your text. The app applies VADER’s rule-based heuristics—handling negations (“not”), intensity modifiers (“very”), capitalization/punctuation emphasis (“GREAT!!!”), and contrast words (“but”)—to adjust, sum, and then normalize into a single compound rating between –1 and +1, which becomes your final sentiment score ￼. This means a high or low raw score may end up softened or flipped once context is considered. If you’d like to override a word’s influence, simply set a different raw value via a Custom Lexicon Template, and the app will apply the same compounding rules to that new value."
-                )
-                .multilineTextAlignment(.center)
-
-                HStack(spacing: 16) {
-                    Link("View main lexicon", destination: URL(string:
-                        "https://github.com/cjhutto/vaderSentiment/blob/master/vaderSentiment/vader_lexicon.txt"
-                    )!)
-                    Link("Emoji lexicon", destination: URL(string:
-                        "https://github.com/cjhutto/vaderSentiment/blob/master/vaderSentiment/emoji_utf8_lexicon.txt"
-                    )!)
+                // — title + blurb —
+                VStack(spacing: 6) {
+                    Text("Sentiment Playground")
+                        .font(.largeTitle.bold())
+                    Text("Try out any sentence with the local models. Great for quick experiments or debugging.")
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: 600)
                 }
-                .font(.system(size: 14))
-            }
-            .padding(.horizontal)
+                .padding(.top, 8)
 
-            Divider()
+                // — model picker —
+                Picker("Sentiment Model", selection: $selectedModel) {
+                    ForEach(SentimentModel.allCases, id: \.self) { m in
+                        Text(m.rawValue).tag(m)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .padding(.horizontal)
+                .onChange(of: selectedModel) { m in
+                    print("🪄 Model changed to \(m.rawValue)")
+                    Task { await runtime.ensureReady(for: m) }
+                }
 
-            // — Search bar —
-            HStack {
-                TextField("Search word…", text: $searchText)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.horizontal, 16)
-                Spacer()
-            }
+                // — multi-line input —
+                TextEditor(text: $inputText)
+                    .font(.system(size: 15, design: .monospaced))
+                    .frame(minHeight: 120)
+                    .border(Color.secondary.opacity(0.4))
+                    .padding(.horizontal)
 
-            // — Column headers —
-            HStack(spacing: 0) {
-                Text("Word")
-                    .bold()
-                    .frame(width: 180, alignment: .leading)
-                Text("Raw Score")
-                    .bold()
-                    .frame(width: 100, alignment: .trailing)
-                Spacer()
-            }
-            .padding(.horizontal, 16)
-            Divider()
+                // — score button —
+                Button(action: runAnalysis) {
+                    Label("Score Text", systemImage: "bolt.fill")
+                        .font(.title2.bold())
+                        .padding(.vertical, 14)
+                        .padding(.horizontal, 30)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.accentColor)
+                        )
+                        .foregroundColor(.white)
+                }
+                .buttonStyle(.plain)
+                .disabled(inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                          || isRunning || isWarming)
 
-            // — Content —
-            if isLoading {
-                Spacer()
-                ProgressView("Loading…")
-                Spacer()
-            } else if loadFailed {
-                Spacer()
-                Text("⛔️ Failed to load lexicon")
-                    .foregroundStyle(.secondary)
-                Spacer()
-            } else {
-                ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 4) {
-                        ForEach(filtered) { e in
-                            HStack(spacing: 0) {
-                                Text(e.word)
-                                    .frame(width: 180, alignment: .leading)
-                                Text(String(format: "%+.2f", e.rawSum))
-                                    .frame(width: 100, alignment: .trailing)
-                                Spacer()
-                            }
+                // — results table —
+                if let sc = scores {
+                    VStack(spacing: 6) {
+                        Text("Result: \(finalSentiment)")
+                            .font(.title2).bold()
+                            .foregroundColor(colorForSentiment(finalSentiment))
+                        HStack(spacing: 20) {
+                            scoreLabel("Pos", sc.pos)
+                            scoreLabel("Neu", sc.neu)
+                            scoreLabel("Neg", sc.neg)
+                            scoreLabel("Comp", sc.compound)
                         }
                     }
-                    .padding(.horizontal, 16)
+                    .padding(.top, 6)
                 }
-            }
 
-            Spacer()
+                Spacer()
+            }
+            .padding(.bottom)
+
+            // ────────────────────────────── warm-up overlay (driven by runtime.status)
+            if case let .warming(model, idx, total) = runtime.status {
+                Color.black.opacity(0.6).ignoresSafeArea()
+                VStack(spacing: 12) {
+                    Image(systemName: "brain.head.profile")
+                        .font(.system(size: 44, weight: .semibold))
+                        .symbolEffect(.pulse, options: .repeating, value: isWarming) // macOS 14+
+                        .padding(.bottom, 4)
+
+                    ProgressView(value: Double(idx) / Double(max(total, 1)))
+                        .progressViewStyle(.linear)
+                        .frame(width: 240)
+
+                    if showSpinner {
+                        ProgressView().progressViewStyle(.circular)
+                        Text("Still warming… \(model.rawValue)")
+                    } else {
+                        Text("Loading models… \(idx)/\(total) · \(Int(max(warmUpTarget - elapsed, 0))) s")
+                            .monospacedDigit()
+                    }
+                }
+                .foregroundColor(.white)
+            }
         }
-        .padding(.vertical, 12)
-        .onAppear(perform: loadLexicon)
+        .onAppear {
+            print("👀 LexiconView.onAppear")
+            elapsed = 0
+            showSpinner = false
+            Task {
+                // Initialize Python + warm ALL models (sequential) once.
+                await PythonBridge.shared.initializePython()
+                await runtime.prewarmAll(startWith: selectedModel)
+            }
+        }
+        .onChange(of: runtime.status) { old, new in
+            print("🔁 runtime.status: \(old) → \(new)")
+            switch new {
+            case .warming:
+                // (re)start countdown UI
+                elapsed = 0
+                showSpinner = false
+            case .ready:
+                // done – hide overlay
+                elapsed = 0
+                showSpinner = false
+            case .failed(let msg):
+                // hide overlay but leave logs
+                print("❌ Warm-up failed: \(msg)")
+                showSpinner = false
+            case .idle:
+                break
+            }
+        }
+        .onReceive(timer) { _ in
+            guard isWarming else { return }
+            elapsed += 1
+            if elapsed >= warmUpTarget { showSpinner = true }
+            if elapsed >= hardCutoff {
+                // Safety: don’t lock the UI; runtime will keep working in background
+                print("⏱️ Warm-up overlay timed out; hiding overlay")
+                // We only hide the countdown UI; worker keeps prewarming in background.
+                showSpinner = true
+            }
+        }
     }
 
-    private func loadLexicon() {
-        guard entries.isEmpty else { return }
-        isLoading = true
-        loadFailed = false
+    // MARK: - Run the analysis
+    private func runAnalysis() {
+        let text = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty else { return }
+        isRunning = true
+        scores = nil
+        print("▶️ runAnalysis model=\(selectedModel.rawValue)")
 
         Task {
-            let all = await Task.detached { Entry.loadAll() }.value
-            // small pause so spinner shows
-            try? await Task.sleep(nanoseconds: 30_000_000)
+            // Ensure selected model is hot before scoring
+            await runtime.ensureReady(for: selectedModel)
+
+            let json = await PythonBridge.shared.scoreSentence(text, model: selectedModel)
+
             await MainActor.run {
-                entries    = all
-                isLoading  = false
-                loadFailed = all.isEmpty
+             if let data = json.data(using: .utf8),
+                let top  = try? JSONSerialization.jsonObject(with: data) as? [String:Any] {
+              
+              // Accept either {rows:[row]} or a flat row dict
+              let first: [String:Any]
+              if let rows = top["rows"] as? [[String:Any]], let r0 = rows.first {
+               first = r0
+              } else {
+               first = top
+              }
+              
+              let pos  = (first["pos"]      as? NSNumber)?.doubleValue ?? 0
+              let neu  = (first["neu"]      as? NSNumber)?.doubleValue ?? 0
+              let neg  = (first["neg"]      as? NSNumber)?.doubleValue ?? 0
+              let comp = (first["compound"] as? NSNumber)?.doubleValue ?? 0
+              let lbl  = (first["final_sentiment"] as? String)
+              ?? (first["model_label"] as? String)
+              ?? "NEUTRAL"
+              
+              self.scores = (pos, neu, neg, comp)
+              self.finalSentiment = lbl
+              self.isRunning = false
+              print("✅ runAnalysis done label=\(lbl) comp=\(comp)")
+             } else {
+              self.isRunning = false
+              // Helpful: show the actual JSON so failures aren’t opaque
+              print("⚠️ runAnalysis parsing failed; json=\(json)")
+             }
             }
+        }
+    }
+
+    // MARK: - small view helpers
+    private func scoreLabel(_ title: String, _ value: Double) -> some View {
+        VStack(spacing: 2) {
+            Text(title).font(.caption).foregroundColor(.secondary)
+            Text(String(format: "%.3f", value))
+                .font(.system(size: 14, design: .monospaced))
+                .bold()
+        }
+    }
+
+    private func colorForSentiment(_ label: String) -> Color {
+        switch label.uppercased() {
+        case "POSITIVE": return .green
+        case "NEGATIVE": return .red
+        case "NEUTRAL":  return .secondary
+        default:         return .primary
         }
     }
 }
